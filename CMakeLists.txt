@@ -19,5 +19,3 @@ add_library(core-dump
 
 target_include_directories(core-dump PUBLIC Include PRIVATE .)
 
-add_executable(core_dump_tester main.cpp)
-target_link_libraries(core_dump_tester core-dump)

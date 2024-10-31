@@ -5,19 +5,7 @@
  * \{
  * \ingroup
  * \brief    Class to write a core file at runtime
- * \details  Steps to add a new section header
- *           - increase HCtrlXCDCoreWriter::st_cCountSectionHeaders by 1
- *           - add name of section to HCtrlXCDCoreWriter::st_cStringTable
- *           - add index to name in string table
- *           - add index to store the position of the section in the elf file
- *           - add section to HCtrlXCDCoreWriter::createSectionHeaders analogously to existing sections
- *           - if required, add the payload as byte array (see e.g. HCtrlXCDCoreWriter::createNoteSectionsPayload)
- *           - link header and payload using HCtrlXCDElf::AddGenericPayload
- *           - add the payload size in HCtrlXCDCoreWriter::GetMaxRequiredNumberOfBytes
- *           - make sure to extend the allowed number of sections and payloads in HCtrlXCDElf
- *
- *           Similar steps are to be done when adding a program header.
- *
+ * \details
  * \author   l.kratzl
  */
 
@@ -50,23 +38,21 @@ public:
     uint32_t GetMaxRequiredNumberOfBytes() const;
 
 private:
-    static constexpr uint32_t st_cCountSectionHeaders = 6U; // the number of section headers that will be written in the elf file
+    static constexpr uint32_t st_cCountSectionHeaders = 5U; // the number of section headers that will be written in the elf file
     static constexpr uint32_t st_cCountProgramHeaders = 3U; // the number of program headers that will be written in the elf file
 
-    static constexpr const char st_cStringTable[] = "\0.shstrtab\0note0\0.data\0Stack\0context\0"; // the string table of the elf file
+    static constexpr const char st_cStringTable[] = "\0.shstrtab\0note0\0.data\0Stack\0"; // the string table of the elf file
     static constexpr uint32_t st_cStringTableSize = sizeof(st_cStringTable); // the size of the string table NOLINT(*-sizeof-expression)
 
     static constexpr uint32_t st_cSingleNoteSize = 20U; // fixed size of any note section (limited to 5 Byte payload)
     static constexpr uint32_t st_cNoteSectionSize =      // size of the .note section
             sizeof(ProcessInfo) + sizeof(ProcessStatus) + 2U * st_cSingleNoteSize;
-    static constexpr uint32_t st_cMaxContextSectionSize = 100U; // max size of the context section
 
     // The indices of the names in the string table (manually calculated)
     static constexpr uint8_t st_cIndexStringTableNameInStringTable = 1U;
     static constexpr uint8_t st_cIndexNoteSectionNameInStringTable = 11U;
     static constexpr uint8_t st_cIndexStackSectionNameInStringTable = 23U;
     static constexpr uint8_t st_cIndexDataSectionNameInStringTable = 17U;
-    static constexpr uint8_t st_cIndexContextSectionNameInStringTable = 29U;
 
     // stores where the index of the section header in the elf file is located
     static constexpr uint8_t st_cIndexNullSectionHeader = 0U;
@@ -74,7 +60,6 @@ private:
     static constexpr uint8_t st_cIndexNoteSectionHeader = 2U;
     static constexpr uint8_t st_cIndexStackSectionHeader = 3U;
     static constexpr uint8_t st_cIndexDataSectionHeader = 4U;
-    static constexpr uint8_t st_cIndexContextNoteSectionHeader = 5U;
 
     // stores where the index of the program header in the elf file is located
     static constexpr uint8_t st_cIndexNoteProgramHeader = 0U;

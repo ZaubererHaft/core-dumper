@@ -23,9 +23,9 @@ class Elf {
 public:
     explicit Elf(const ElfHeader &arg_Header);
 
-    uint8_t AddSectionHeader(SectionHeader &arg_Header);
+    uint8_t AddSectionHeader(const SectionHeader &arg_Header);
 
-    uint8_t AddProgramHeader(ProgramHeader &arg_Header);
+    uint8_t AddProgramHeader(const ProgramHeader &arg_Header);
 
     uint8_t AddGenericPayload(const uint8_t *arg_pPayload, uint32_t arg_PayloadLength);
 

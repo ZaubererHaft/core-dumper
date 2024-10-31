@@ -19,7 +19,7 @@ Elf CoreWriter::createElf() {
 
 uint32_t CoreWriter::GetMaxRequiredNumberOfBytes() const {
     return getNumberOfBytesUntilPayload() + memInfo.StackSize + memInfo.DataSize + st_cStringTableSize +
-           st_cNoteSectionSize + st_cMaxContextSectionSize;
+           st_cNoteSectionSize;
 }
 
 uint32_t CoreWriter::getNumberOfBytesUntilPayload() {
@@ -113,11 +113,6 @@ void CoreWriter::createSectionHeaders(uint8_t arg_pSectionHeaderIndices[st_cCoun
     tmp_DataSectionHeader.SetSize(memInfo.DataSize);
     tmp_DataSectionHeader.SetAddrAlign(4U);
     arg_pSectionHeaderIndices[st_cIndexDataSectionHeader] = elf.AddSectionHeader(tmp_DataSectionHeader);
-
-    SectionHeader tmp_ContextNoteSectionHeader{eElfSectionType_t::SHT_NOTE,
-                                               st_cIndexContextSectionNameInStringTable};
-    tmp_ContextNoteSectionHeader.AddFlag(eElfSectionFlags_t::SHF_ALLOC);
-    arg_pSectionHeaderIndices[st_cIndexContextNoteSectionHeader] = elf.AddSectionHeader(tmp_ContextNoteSectionHeader);
 }
 
 void CoreWriter::createProgramHeaders(uint8_t arg_pSrogramHeaderIndices[st_cCountProgramHeaders]) {
@@ -142,8 +137,8 @@ void CoreWriter::createProgramHeaders(uint8_t arg_pSrogramHeaderIndices[st_cCoun
 
 uint32_t CoreWriter::createNoteSectionsPayload(uint8_t *arg_pBuffer, uint32_t *arg_pRegisters) {
     ProcessInfo tmp_Info{};
-    tmp_Info.CopyFname("ApplFcc");
-    tmp_Info.CopyPsargs("ApplFcc.elf");
+    tmp_Info.CopyFname("Appl");
+    tmp_Info.CopyPsargs("Appl.elf");
 
     ProcessStatus tmp_Status{};
     tmp_Status.ReadMemory(arg_pRegisters);

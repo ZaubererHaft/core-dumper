@@ -13,19 +13,21 @@ Elf::Elf(const ElfHeader &arg_Header)
     (void) std::memset(&programPayloads[0], -1, st_cMaxProgramPayloads);
 }
 
-uint8_t Elf::AddSectionHeader(SectionHeader &arg_Header) {
+uint8_t Elf::AddSectionHeader(const SectionHeader &arg_Header) {
     if (sectionHeaderCount >= st_cMaxSectionHeaders) {
         Crash();
     }
+
     header.IncShnum();
     uint8_t tmp_Index = sectionHeaderCount;
+
     sectionHeaders[tmp_Index] = arg_Header;
     sectionHeaderCount++;
     header.SetPhoff(header.GetEhsize() + header.GetShnum() * header.GetShentsize());
     return tmp_Index;
 }
 
-uint8_t Elf::AddProgramHeader(ProgramHeader &arg_Header) {
+uint8_t Elf::AddProgramHeader(const ProgramHeader &arg_Header) {
     if (programHeaderCount >= st_cMaxProgramHeaders) {
         Crash();
     }
@@ -54,7 +56,7 @@ void Elf::LinkSectionHeaderWithPayload(uint8_t arg_SectionIndex, uint8_t arg_Pay
         Crash();
     }
     if (sectionPayloads[arg_SectionIndex] > 0) {
-        Crash(); //alreay in use
+        Crash(); //already in use
     }
 
     sectionPayloads[arg_SectionIndex] = static_cast<int8_t>(arg_PayloadIndex);
@@ -66,7 +68,7 @@ void Elf::LinkProgramHeaderWithPayload(uint8_t arg_SectionIndex, uint8_t arg_Pay
         Crash();
     }
     if (programPayloads[arg_SectionIndex] > 0) {
-        Crash(); //alreay in use
+        Crash(); //already in use
     }
 
     programPayloads[arg_SectionIndex] = static_cast<int8_t>(arg_PayloadIndex);
