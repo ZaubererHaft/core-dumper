@@ -25,7 +25,7 @@ With that, stack traces can be generated for post-mortem analyses.
 * `info frame` - shows important values of the active frame
 
 ### Troubleshooting / Analyze core-file
-Use the `eu-readelf` to analyze the core dump file in case of problems. The command `eu-readelf -a coredump.elf` should produce an output like this (Note that the context / note section is not part of the current version):
+Use the `eu-readelf` to analyze the core dump file in case of problems. The command `eu-readelf -a coredump.elf` should produce an output like this:
 
 ![alt text](img.png "Image")
 
