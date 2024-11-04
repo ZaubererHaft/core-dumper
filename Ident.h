@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDIDENT_H_
-#define HCTRLXCDIDENT_H_
+#ifndef IDENT_H_
+#define IDENT_H_
 
 #include <cstdint>
 
@@ -50,7 +50,7 @@ private:
     uint8_t data[16U];
 };
 
-#endif // HCtrlXCDIDENT_H_
+#endif // IDENT_H_
 
 /**
  * \}

@@ -12,7 +12,7 @@
 CreateDump:
   PUSH {R4, R5}
 
-  // first save R0 because using it as base in the SMIA instruction would be unpredictable
+  // first save R0 because using it as base in the STMIA instruction would be unpredictable
   STR R0, [R0]
   ADD R0, #4
 

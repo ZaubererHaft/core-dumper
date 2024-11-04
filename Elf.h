@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDELF_H_
-#define HCTRLXCDELF_H_
+#ifndef ELF_H_
+#define ELF_H_
 
 #include <utility>
 
@@ -57,7 +57,7 @@ private:
     uint8_t payloadCount;
 };
 
-#endif // HCTRLXCDELF_H_
+#endif // ELF_H_
 
 /**
  * \}

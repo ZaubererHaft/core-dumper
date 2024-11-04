@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDSECTIONHEADER_H_
-#define HCTRLXCDSECTIONHEADER_H_
+#ifndef SECTIONHEADER_H_
+#define SECTIONHEADER_H_
 
 #include "Types.h"
 
@@ -61,7 +61,7 @@ public:
     uint32_t CopyToBufferAt(uint8_t *arg_pBuffer) const;
 };
 
-#endif // HCtrlXCDSECTIONHEADER_H_
+#endif // SECTIONHEADER_H_
 
 /**
  * \}

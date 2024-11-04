@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDNOTESECTION_H_
-#define HCTRLXCDNOTESECTION_H_
+#ifndef NOTESECTION_H_
+#define NOTESECTION_H_
 
 #include "Types.h"
 #include <string>
@@ -31,7 +31,7 @@ private:
     std::string name;
 };
 
-#endif // HCtrlXCDNOTESECTION_H_
+#endif // NOTESECTION_H_
 
 /**
  * \}

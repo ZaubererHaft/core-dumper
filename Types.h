@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDTYPES_H_
-#define HCTRLXCDTYPES_H_
+#ifndef TYPES_H_
+#define TYPES_H_
 
 #include <cstdint>
 
@@ -31,7 +31,7 @@ static constexpr Half st_cProgramHeaderSize = 5U * sizeof(Word) + 2U * sizeof(Ad
 
 
 
-#endif // HCTRLXCDTYPES_H_
+#endif // TYPES_H_
 
 /**
  * \}

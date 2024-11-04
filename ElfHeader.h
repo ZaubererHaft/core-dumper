@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDELFHEADER_H_
-#define HCTRLXCDELFHEADER_H_
+#ifndef ELFHEADER_H_
+#define ELFHEADER_H_
 
 #include "Ident.h"
 #include "Types.h"
@@ -90,7 +90,7 @@ private:
     Half shstrndx;  // section header table index
 };
 
-#endif // HCtrlXCDELFHEADER_H_
+#endif // ELFHEADER_H_
 
 /**
  * \}

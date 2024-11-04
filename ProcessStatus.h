@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDPROCESSSTATUS_H_
-#define HCTRLXCDPROCESSSTATUS_H_
+#ifndef PROCESSSTATUS_H_
+#define PROCESSSTATUS_H_
 
 #include "NoteSection.h"
 #include "Types.h"
@@ -66,7 +66,7 @@ private:
     Word fpvalid; // True if math co-processor being used
 };
 
-#endif // HCtrlXCDPROCESSSTATUS_H_
+#endif // PROCESSSTATUS_H_
 
 /**
  * \}

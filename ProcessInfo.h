@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDPROCESSINFO_H_
-#define HCTRLXCDPROCESSINFO_H_
+#ifndef PROCESSINFO_H_
+#define PROCESSINFO_H_
 
 #include "NoteSection.h"
 #include "Types.h"
@@ -44,7 +44,7 @@ private:
     uint8_t psargs[80]; /* initial part of arg list */
 };
 
-#endif // HCtrlXCDPROCESSINFO_H_
+#endif // PROCESSINFO_H_
 
 /**
  * \}

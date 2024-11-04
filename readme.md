@@ -4,13 +4,12 @@ This library can be used to create an ELF core dump file into a provided buffer.
 With that, stack traces can be generated for post-mortem analyses.
 
 ## How To Use
-The following steps should be executed with disabled interrupts. 
-
 1) Create a memory info instance: `MemoryInformation memInfo{stackEnd, stackSize, dataEnd, dataSize}`. The object needs the end addresses of the stack and data segment as well as their size. This information can usually be obtained using the linker script (`*.ld`)
 2) Create an instance of the core writer and pass the memory Info: `CoreWriter writer{memInfo}`
 3) Allocate a memory buffer, e.g. using `new`. The size of the buffer should match the size of the stack and data segment as well as additional bytes for the elf headers
-4) Call `writer.Write(buffer, buffLen)`. The elf-file is now stored in the buffer
-5) Now write the stack trace to the file system
+4) Call `auto written = writer.Write(buffer, buffLen)`. The elf-file is now stored in the buffer
+5) If written > 0, the provided buffer was sufficient for the stack trace
+6) Now write the stack trace to the file system
 
 ## Analyze the core-dump file
 * Start the `arm-none-eabi-gdb` console
@@ -73,3 +72,6 @@ MemoryInformation memInfo{(uint32_t)&StackStart, (uint32_t)&StackEnd, (uint32_t)
 ```
 
 If the symbols do no exist, add them in the linker file or read the addresses form the sections in the `elf` file using `eu-readelf`. 
+
+## Adapt Crash dummy
+Currently, a dead end in `crash_dummy.cpp` from the header `crash.h` is implemented to make the code more lean. Provide an own implementation to remove the exception.

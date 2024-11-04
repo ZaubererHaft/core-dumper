@@ -4,11 +4,14 @@
 #include "ProcessInfo.h"
 #include "ProcessStatus.h"
 
-CoreWriter::CoreWriter(const MemoryInformation &arg_MemInfo) : memInfo{arg_MemInfo}, elf{createElf()} {
+CoreWriter::CoreWriter(const MemoryInformation &arg_MemInfo) : memInfo{arg_MemInfo}, elf{createElf()}, addresses{
+        arg_MemInfo.StackEndAddress - arg_MemInfo.StackSize, arg_MemInfo.StackEndAddress,
+        arg_MemInfo.DataEndAddress - arg_MemInfo.DataSize, arg_MemInfo.DataEndAddress} {
 }
 
 extern "C" void
-CreateDump(uint32_t *arg_pBufferForRegisters, uint8_t *arg_pBufferForStack, uint8_t *arg_pBufferForData);
+CreateDump(uint32_t *arg_pBufferForRegisters, uint8_t *arg_pBufferForStack, uint8_t *arg_pBufferForData,
+           uint32_t *arg_pAddresses);
 
 Elf CoreWriter::createElf() {
     ElfHeader tmp_Header{};
@@ -22,62 +25,68 @@ uint32_t CoreWriter::GetMaxRequiredNumberOfBytes() const {
            st_cNoteSectionSize;
 }
 
-uint32_t CoreWriter::getNumberOfBytesUntilPayload() {
+constexpr uint32_t CoreWriter::getNumberOfBytesUntilPayload() {
     return st_cElfHeaderSize + st_cCountProgramHeaders * st_cProgramHeaderSize +
            st_cSectionHeaderSize * st_cCountSectionHeaders;
 }
 
 uint32_t CoreWriter::Write(uint8_t *arg_pBuffer, uint32_t arg_BuffLen) {
+    uint32_t tmp_Written = 0U;
+
     uint32_t tmp_Registers[18U] = {0U};
     elf = createElf();
 
     uint32_t tmp_OffsetUntilPayload = getNumberOfBytesUntilPayload();
 
-    CreateDump(&tmp_Registers[0], &arg_pBuffer[tmp_OffsetUntilPayload],
-               &arg_pBuffer[tmp_OffsetUntilPayload + memInfo.StackSize]);
+    uint32_t tmp_StackSize = addresses[1] - addresses[0];
+    uint32_t tmp_DataSize = addresses[3] - addresses[2];
 
-    uint8_t tmp_StackProgramHeaderPayloadIndex = elf.AddGenericPayload(&arg_pBuffer[tmp_OffsetUntilPayload],
-                                                                       memInfo.StackSize);
+    if (tmp_OffsetUntilPayload + tmp_DataSize + tmp_StackSize < arg_BuffLen) {
 
-    uint8_t tmp_DataProgramHeaderPayloadIndex = elf.AddGenericPayload(
-            &arg_pBuffer[tmp_OffsetUntilPayload + memInfo.StackSize], memInfo.DataSize);
+        CreateDump(&tmp_Registers[0], &arg_pBuffer[tmp_OffsetUntilPayload],
+                   &arg_pBuffer[tmp_OffsetUntilPayload + memInfo.StackSize], addresses);
 
-    uint8_t tmp_SectionHeaderIndices[st_cCountSectionHeaders];
-    createSectionHeaders(tmp_SectionHeaderIndices);
+        uint8_t tmp_StackProgramHeaderPayloadIndex = elf.AddGenericPayload(&arg_pBuffer[tmp_OffsetUntilPayload],
+                                                                           memInfo.StackSize);
+        uint8_t tmp_DataProgramHeaderPayloadIndex = elf.AddGenericPayload(
+                &arg_pBuffer[tmp_OffsetUntilPayload + memInfo.StackSize], memInfo.DataSize);
 
-    uint8_t tmp_ProgramHeaderIndices[st_cCountProgramHeaders];
-    createProgramHeaders(tmp_ProgramHeaderIndices);
+        uint8_t tmp_SectionHeaderIndices[st_cCountSectionHeaders];
+        createSectionHeaders(tmp_SectionHeaderIndices);
 
-    uint8_t tmp_NoteSectionBuffer[st_cNoteSectionSize] = {0U};
+        uint8_t tmp_ProgramHeaderIndices[st_cCountProgramHeaders];
+        createProgramHeaders(tmp_ProgramHeaderIndices);
 
-    uint32_t tmp_NoteBuffLen = createNoteSectionsPayload(&tmp_NoteSectionBuffer[0], &tmp_Registers[0]);
-    uint8_t tmp_NotePayloadIndex = elf.AddGenericPayload(&tmp_NoteSectionBuffer[0], tmp_NoteBuffLen);
+        uint8_t tmp_NoteSectionBuffer[st_cNoteSectionSize] = {0U};
+        uint32_t tmp_NoteBuffLen = createNoteSectionsPayload(&tmp_NoteSectionBuffer[0], &tmp_Registers[0]);
+        uint8_t tmp_NotePayloadIndex = elf.AddGenericPayload(&tmp_NoteSectionBuffer[0], tmp_NoteBuffLen);
 
-    uint8_t tmp_StringTablePayloadIndex = elf.AddGenericPayload(reinterpret_cast<const uint8_t *>(&st_cStringTable[0]),
-                                                                st_cStringTableSize);
+        uint8_t tmp_StringTablePayloadIndex = elf.AddGenericPayload(
+                reinterpret_cast<const uint8_t *>(&st_cStringTable[0]),
+                st_cStringTableSize);
 
-    elf.LinkProgramHeaderWithPayload(tmp_ProgramHeaderIndices[st_cIndexStackProgramHeader],
-                                     tmp_StackProgramHeaderPayloadIndex);
-    elf.LinkSectionHeaderWithPayload(tmp_SectionHeaderIndices[st_cIndexStackSectionHeader],
-                                     tmp_StackProgramHeaderPayloadIndex);
+        elf.LinkProgramHeaderWithPayload(tmp_ProgramHeaderIndices[st_cIndexStackProgramHeader],
+                                         tmp_StackProgramHeaderPayloadIndex);
+        elf.LinkSectionHeaderWithPayload(tmp_SectionHeaderIndices[st_cIndexStackSectionHeader],
+                                         tmp_StackProgramHeaderPayloadIndex);
 
-    elf.LinkProgramHeaderWithPayload(tmp_ProgramHeaderIndices[st_cIndexDataProgramHeader],
-                                     tmp_DataProgramHeaderPayloadIndex);
-    elf.LinkSectionHeaderWithPayload(tmp_SectionHeaderIndices[st_cIndexDataSectionHeader],
-                                     tmp_DataProgramHeaderPayloadIndex);
+        elf.LinkProgramHeaderWithPayload(tmp_ProgramHeaderIndices[st_cIndexDataProgramHeader],
+                                         tmp_DataProgramHeaderPayloadIndex);
+        elf.LinkSectionHeaderWithPayload(tmp_SectionHeaderIndices[st_cIndexDataSectionHeader],
+                                         tmp_DataProgramHeaderPayloadIndex);
 
-    elf.LinkSectionHeaderWithPayload(tmp_SectionHeaderIndices[st_cIndexStringSectionHeader],
-                                     tmp_StringTablePayloadIndex);
+        elf.LinkSectionHeaderWithPayload(tmp_SectionHeaderIndices[st_cIndexStringSectionHeader],
+                                         tmp_StringTablePayloadIndex);
 
-    elf.LinkProgramHeaderWithPayload(tmp_ProgramHeaderIndices[st_cIndexNoteProgramHeader], tmp_NotePayloadIndex);
-    elf.LinkSectionHeaderWithPayload(tmp_SectionHeaderIndices[st_cIndexNoteSectionHeader], tmp_NotePayloadIndex);
+        elf.LinkProgramHeaderWithPayload(tmp_ProgramHeaderIndices[st_cIndexNoteProgramHeader], tmp_NotePayloadIndex);
+        elf.LinkSectionHeaderWithPayload(tmp_SectionHeaderIndices[st_cIndexNoteSectionHeader], tmp_NotePayloadIndex);
 
 
-    uint32_t tmp_TargetLen = elf.CalculateSize();
-    uint32_t tmp_Written = 0U;
+        uint32_t tmp_TargetLen = elf.CalculateSize();
 
-    if (tmp_TargetLen <= arg_BuffLen) {
-        tmp_Written = elf.WriteToBuffer(arg_pBuffer);
+        if (tmp_TargetLen <= arg_BuffLen) {
+            tmp_Written = elf.WriteToBuffer(arg_pBuffer);
+        }
     }
 
     return tmp_Written;

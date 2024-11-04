@@ -76,7 +76,7 @@ private:
      * \brief Returns the number of bytes in the elf which is not payload but header information
      *        such as section headers and program headers and the size of the elf header.
      */
-    static uint32_t getNumberOfBytesUntilPayload();
+    static constexpr uint32_t getNumberOfBytesUntilPayload();
 
     void createSectionHeaders(uint8_t arg_pSectionHeaderIndices[st_cCountSectionHeaders]);
 
@@ -86,6 +86,7 @@ private:
 
     MemoryInformation memInfo;
     Elf elf;
+    uint32_t addresses[4];
 };
 
 #endif // HCTRLXCDCOREWRITER_H_

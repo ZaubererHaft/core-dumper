@@ -1,5 +1,5 @@
-#ifndef CORE_DUMP_MEMORYINFORMATION_H
-#define CORE_DUMP_MEMORYINFORMATION_H
+#ifndef MEMORYINFORMATION_H
+#define MEMORYINFORMATION_H
 
 #include <cstdint>
 
@@ -11,4 +11,4 @@ struct MemoryInformation {
 };
 
 
-#endif //CORE_DUMP_MEMORYINFORMATION_H
+#endif //MEMORYINFORMATION_H

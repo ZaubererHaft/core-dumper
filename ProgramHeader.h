@@ -10,8 +10,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDPROGRAMHEADER_H_
-#define HCTRLXCDPROGRAMHEADER_H_
+#ifndef PROGRAMHEADER_H_
+#define PROGRAMHEADER_H_
 
 #include "Types.h"
 
@@ -64,7 +64,7 @@ private:
     Word align;    // value to which the segments are aligned in memory and in the file
 };
 
-#endif // HCtrlXCDPROGRAMHEADER_H_
+#endif // PROGRAMHEADER_H_
 
 /**
  * \}
