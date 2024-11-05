@@ -22,6 +22,10 @@ public:
 
     SigInfo();
 
+    static constexpr std::size_t Size() {
+        return 3 * sizeof(Word);
+    }
+
 private:
     Word signo;     // Signal number
     Word code;      // Extra code
@@ -33,6 +37,10 @@ public:
     friend class ProcessStatus;
 
     TimeVal();
+
+    static constexpr std::size_t Size() {
+        return 2 * sizeof(Word);
+    }
 
 private:
     Word sec;  // Seconds
@@ -48,6 +56,10 @@ public:
     void ReadMemory(const uint32_t *arg_pRegisters);
 
     static Word GetTypeForNoteSection();
+
+    static constexpr std::size_t Size() {
+        return 1 * SigInfo::Size() + 26 * sizeof(Word) + 4 * TimeVal::Size();
+    }
 
 private:
     SigInfo info;    // Info associated with signal

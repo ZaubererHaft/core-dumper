@@ -1,11 +1,13 @@
 #include "ElfHeader.h"
+#include "ProgramHeader.h"
+#include "SectionHeader.h"
 #include <cstring>
 
 ElfHeader::ElfHeader()
         : ident{}, type{eDElfHeaderType_t::ET_CORE}, machine{eElfHeaderMachine_t::EM_ARM},
           version{eElfHeaderVersion_t::EV_CURRENT}, entry{0U}, phoff{0U}, shoff{0U}, flags{0U},
-          ehsize{st_cElfHeaderSize},
-          phentsize{st_cProgramHeaderSize}, phnum{0U}, shentsize{st_cSectionHeaderSize}, shnum{0U}, shstrndx{0U} {
+          ehsize{ElfHeader::Size()},
+          phentsize{ProgramHeader::Size()}, phnum{0U}, shentsize{SectionHeader::Size()}, shnum{0U}, shstrndx{0U} {
 }
 
 uint32_t ElfHeader::CopyToBufferAt(uint8_t *arg_pBuffer) const {

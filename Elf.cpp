@@ -7,7 +7,7 @@ Elf::Elf(const ElfHeader &arg_Header)
         : header(arg_Header), sectionHeaders{}, programHeaders{}, sectionPayloads{-1}, programPayloads{-1},
           payloads{{nullptr, 0}},
           sectionHeaderCount{0U}, programHeaderCount{0U}, payloadCount{0U} {
-    header.SetShoff(st_cElfHeaderSize);
+    header.SetShoff(ElfHeader::Size());
 
     (void) std::memset(&sectionPayloads[0], -1, st_cMaxSectionPayloads);
     (void) std::memset(&programPayloads[0], -1, st_cMaxProgramPayloads);

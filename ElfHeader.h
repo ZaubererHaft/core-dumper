@@ -73,6 +73,10 @@ public:
 
     void IncPhnum();
 
+    static constexpr std::size_t Size() {
+        return 16U * sizeof(uint8_t) + 2U * sizeof(Word) + 8U * sizeof(Half) + 1U * sizeof(Addr) + 2U * sizeof(Offs);
+    }
+
 private:
     Ident ident;     // ELF identification description
     eDElfHeaderType_t type;      // Object File Type

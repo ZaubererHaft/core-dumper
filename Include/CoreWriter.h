@@ -44,9 +44,9 @@ private:
     static constexpr const char st_cStringTable[] = "\0.shstrtab\0note0\0.data\0Stack\0"; // the string table of the elf file
     static constexpr uint32_t st_cStringTableSize = sizeof(st_cStringTable); // the size of the string table NOLINT(*-sizeof-expression)
 
-    static constexpr uint32_t st_cSingleNoteSize = 20U; // fixed size of any note section (limited to 5 Byte payload)
+    static constexpr uint32_t st_cSingleNoteSize = 20U; // fixed size of any note section (limited to 5 Byte payload + header)
     static constexpr uint32_t st_cNoteSectionSize =      // size of the .note section
-            sizeof(ProcessInfo) + sizeof(ProcessStatus) + 2U * st_cSingleNoteSize;
+            ProcessInfo::Size() + ProcessStatus::Size() + 2U * st_cSingleNoteSize;
 
     // The indices of the names in the string table (manually calculated)
     static constexpr uint8_t st_cIndexStringTableNameInStringTable = 1U;
