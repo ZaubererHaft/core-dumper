@@ -1,6 +1,6 @@
-#ifndef CORE_DUMP_CRASH_H
-#define CORE_DUMP_CRASH_H
+#ifndef CRASH_H
+#define CRASH_H
 
 void Crash();
 
-#endif //CORE_DUMP_CRASH_H
+#endif //CRASH_H

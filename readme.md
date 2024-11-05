@@ -26,7 +26,7 @@ With that, stack traces can be generated for post-mortem analyses.
 
 ### Example
 See the following images to have an impression on how the final result will look like.
-The first frames of an created frame useing `bt`:
+The first frames of a using `bt`:
 
 ![alt text](img_bt.png "Image")
 
@@ -56,15 +56,15 @@ If not, the file might be corrupted.
 ## Add a section header
 Sometimes, custom or additional section should be added. Perform the following steps to do so: 
 
-1) increase CoreWriter::st_cCountSectionHeaders by 1
-2) add name of section to CoreWriter::st_cStringTable
-3) add index to name in string table
-4) add index to store the position of the section in the elf file
-5) add section to CoreWriter::createSectionHeaders similar to the existing sections
-6) if required, add the payload as byte array (see e.g. CoreWriter::createNoteSectionsPayload)
-7) link header and payload using Elf::AddGenericPayload
-8) add the payload size in CoreWriter::GetMaxRequiredNumberOfBytes
-9) make sure to extend the allowed number of sections and payloads in Elf
+1) increase `CoreWriter::st_cCountSectionHeaders` by 1
+2) add the name of section to `CoreWriter::st_cStringTable`
+3) add the index to name of the new section in string table (similar to the existing variables)
+4) add the index to store the position of the section header in the elf file  (similar to the existing variables)
+5) add the section to `CoreWriter::createSectionHeaders` similar to the existing sections
+6) if required, add the payload of the section as byte array (see e.g. `CoreWriter::createNoteSectionsPayload`)
+7) link header index and payload using `Elf::AddGenericPayload`
+8) add the payload size in `CoreWriter::GetMaxRequiredNumberOfBytes`
+9) make sure to extend the allowed number of sections and payloads in the `Elf` class
 
 Similar steps are to be done when adding a program header.
 

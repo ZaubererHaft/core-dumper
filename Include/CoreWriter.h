@@ -9,8 +9,8 @@
  * \author   l.kratzl
  */
 
-#ifndef HCTRLXCDCOREWRITER_H_
-#define HCTRLXCDCOREWRITER_H_
+#ifndef COREWRITER_H_
+#define COREWRITER_H_
 
 #include "Elf.h"
 #include "ProcessInfo.h"
@@ -89,7 +89,7 @@ private:
     uint32_t addresses[4];
 };
 
-#endif // HCTRLXCDCOREWRITER_H_
+#endif // COREWRITER_H_
 
 /**
  * \}
