@@ -24,6 +24,28 @@ With that, stack traces can be generated for post-mortem analyses.
 * `info args` - shows the function arguments of the active frame
 * `info frame` - shows important values of the active frame
 
+### Example
+See the following images to have an impression on how the final result will look like.
+The first frames of an created frame useing `bt`:
+
+![alt text](img_bt.png "Image")
+
+One can see that the last frame is always the `CreateDump()` function. However, the higher levels contain the program flow and with that the stack trace of the system.
+
+With `up` one can switch between active frames:
+
+![alt text](img_up.png "Image")
+
+Then, local variables and registers can be analyzed too using the `info ...` commands:
+
+![alt text](img_info.png "Image")
+
+### Limitations
+
+While variables stored in the `.data` sections ara analyzable, too (because they were save as section), uninitialized `.bss` data is not.
+The main reason here was to reduce the size of the core file in an embedded setting where there is just one process running. 
+`gdb` will show a warning with unknown addresses, here. 
+
 ### Troubleshooting / Analyze core-file
 Use the `eu-readelf` to analyze the core dump file in case of problems. The command `eu-readelf -a coredump.elf` should produce an output like this:
 
