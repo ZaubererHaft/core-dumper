@@ -45,6 +45,10 @@ public:
 
     void SetAddrAlign(Word arg_AddrAlign);
 
+    static constexpr std::size_t Size() {
+        return 8U * sizeof(Word) + 1U * sizeof(Addr) + 1U * sizeof(Offs);
+    }
+
 private:
     Word name;      // name of the section. Its value is an index into the section header string table section
     eElfSectionType_t type;      // This member categorizes the section's contents and semantic

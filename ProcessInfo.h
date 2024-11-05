@@ -28,6 +28,10 @@ public:
 
     static Word GetTypeForNoteSection();
 
+    static constexpr std::size_t Size() {
+        return 100 * sizeof(uint8_t) + 5 * sizeof(Word) + 2 * sizeof(Half);
+    }
+
 private:
     uint8_t state; /* numeric process state */
     uint8_t sname; /* char for pr_state */

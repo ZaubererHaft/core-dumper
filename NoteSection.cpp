@@ -8,7 +8,7 @@ NoteSection::NoteSection() : namesz{0U}, descsz{0U}, type{0U}, name{} {
 NoteSection::NoteSection(const std::string &arg_Name, Word arg_Size, Word arg_Type) : namesz{5U}, descsz{arg_Size},
                                                                                       type{arg_Type}, name{arg_Name} {
     if (arg_Name.size() + 1U != namesz) {
-        Crash(); //currently only names of size 4 allowed!
+        Crash(); //currently only names of size 4 allowed! Note: this is a constraint of this library
     }
 }
 

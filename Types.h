@@ -25,9 +25,7 @@ static constexpr uint8_t st_cOffsetWord = sizeof(Word);
 static constexpr uint8_t st_cOffsetOffs = sizeof(Offs);
 static constexpr uint8_t st_cOffsetAddr = sizeof(Addr);
 
-static constexpr Half st_cElfHeaderSize    = 16U * sizeof(uint8_t) + 2U * sizeof(Word) + 8U * sizeof(Half) + 1U * sizeof(Addr) + 2U * sizeof(Offs);
-static constexpr Half st_cSectionHeaderSize = 8U * sizeof(Word) + 1U * sizeof(Addr) + 1U * sizeof(Offs);
-static constexpr Half st_cProgramHeaderSize = 5U * sizeof(Word) + 2U * sizeof(Addr) + 1U * sizeof(Offs);
+
 
 
 

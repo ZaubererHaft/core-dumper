@@ -53,6 +53,10 @@ public:
 
     void SetAlign(Word arg_Align);
 
+    static constexpr std::size_t Size() {
+        return 5U * sizeof(Word) + 2U * sizeof(Addr) + 1U * sizeof(Offs);
+    }
+
 private:
     eElfProgramType_t type;     // array element information.
     Offs offset;   // offset from the beginning of the file at which the first byte of the segment resides.
